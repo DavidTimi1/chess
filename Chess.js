@@ -1992,74 +1992,77 @@ let chessBg = document.getElementsByTagName("table");
 let undo = function(){
     if (history.length == 0){
         return
-    }
-    let split = history.splice(-1)[0];
-    let lastLog = split.split(" ");
-    undoPiece = eval(lastLog[0]);
-    side = undoPiece.side;
-    let oppSide;
-    side == "white" ? oppSide = "black" : oppSide = "white"
-    if (lastLog[1] == "from"){
+    } 
+    setTimeout(function() {
 
-        let newPos = [lastLog[4][0],lastLog[4][2]];
-        chessboard[newPos[0]][newPos[1]].classList.remove("occupied");
-        chessboard[newPos[0]][newPos[1]].classList.remove(side);
-        chessboard[newPos[0]][newPos[1]].innerHTML = "";
+        let split = history.splice(-1)[0];
+        let lastLog = split.split(" ");
+        undoPiece = eval(lastLog[0]);
+        side = undoPiece.side;
+        let oppSide;
+        side == "white" ? oppSide = "black" : oppSide = "white"
+        if (lastLog[1] == "from"){
 
-        let oldPos = [lastLog[2][0],lastLog[2][2]];
-        console.log(oldPos);
-        if (chessboard[newPos[0]][newPos[1]].classList.contains("king")){
-            chessboard[newPos[0]][newPos[1]].classList.remove("king");
-            chessboard[oldPos[0]][oldPos[1]].classList.add("king");
+            let newPos = [lastLog[4][0],lastLog[4][2]];
+            chessboard[newPos[0]][newPos[1]].classList.remove("occupied");
+            chessboard[newPos[0]][newPos[1]].classList.remove(side);
+            chessboard[newPos[0]][newPos[1]].innerHTML = "";
+
+            let oldPos = [lastLog[2][0],lastLog[2][2]];
+            console.log(oldPos);
+            if (chessboard[newPos[0]][newPos[1]].classList.contains("king")){
+                chessboard[newPos[0]][newPos[1]].classList.remove("king");
+                chessboard[oldPos[0]][oldPos[1]].classList.add("king");
+            }
+
+            undoPiece.row = oldPos[0];
+            undoPiece.col = oldPos[1];
+
+            chessboard[oldPos[0]][oldPos[1]].classList.add("occupied");
+            chessboard[oldPos[0]][oldPos[1]].classList.add(side);
+            chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
+            onclick="select(${undoPiece.id})" 
+            src="${undoPiece.dir}"/>`;
+
+            isChecked(side);
+            isChecked(oppSide);
+            turn--;
+
+
+        } else if (lastLog[1] == "captured"){
+            
+            let oldPos = [lastLog[3][0], lastLog[3][2]];
+            console.log(oldPos);
+            undoPiece.row = oldPos[0];
+            undoPiece.col = oldPos[1];
+            side == "white" ? capturedBlack.pop() : capturedWhite.pop();
+            console.log(capturedWhite);
+            console.log(capturedBlack);
+            chessboard[oldPos[0]][oldPos[1]].classList.add(side);
+
+            chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
+            onclick="select(${undoPiece.id})" 
+            src="${undoPiece.dir}"/>`;
+
+        } else {
+
+            side == "white" ? undoPiece.piece = "wpawn": undoPiece.piece = "bpawn";
+            undoPiece.dir = side + "-pawn" + undoPiece.id.slice(-2,-1) + ".png";
+            let g = undoPiece.row;
+            let h = undoPiece.col;
+
+            chessboard[g][h].innerHTML = `<img id="${undoPiece.id}" 
+            onclick="select(${undoPiece.id})" 
+            src="${undoPiece.dir}"/>`;
+
+            notify( "Most recent history has been removed", "brown")
+            isChecked(side);
+            isChecked(oppSide);
+
         }
-
-        undoPiece.row = oldPos[0];
-        undoPiece.col = oldPos[1];
-
-        chessboard[oldPos[0]][oldPos[1]].classList.add("occupied");
-        chessboard[oldPos[0]][oldPos[1]].classList.add(side);
-        chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
-        onclick="select(${undoPiece.id})" 
-        src="${undoPiece.dir}"/>`;
-
-        isChecked(side);
-        isChecked(oppSide);
-        turn--;
-
-
-    } else if (lastLog[1] == "captured"){
-        
-        let oldPos = [lastLog[3][0], lastLog[3][2]];
-        console.log(oldPos);
-        undoPiece.row = oldPos[0];
-        undoPiece.col = oldPos[1];
-        side == "white" ? capturedBlack.pop() : capturedWhite.pop();
-        console.log(capturedWhite);
-        console.log(capturedBlack);
-        chessboard[oldPos[0]][oldPos[1]].classList.add(side);
-
-        chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
-        onclick="select(${undoPiece.id})" 
-        src="${undoPiece.dir}"/>`;
-
-    } else {
-
-        side == "white" ? undoPiece.piece = "wpawn": undoPiece.piece = "bpawn";
-        undoPiece.dir = side + "-pawn" + undoPiece.id.slice(-2,-1) + ".png";
-        let g = undoPiece.row;
-        let h = undoPiece.col;
-
-        chessboard[g][h].innerHTML = `<img id="${undoPiece.id}" 
-        onclick="select(${undoPiece.id})" 
-        src="${undoPiece.dir}"/>`;
-
-        notify( "Most recent history has been removed", "brown")
-        isChecked(side);
-        isChecked(oppSide);
-
-    }
-    document.getElementById("reverseAudio").play()
-    return history
+        document.getElementById("reverseAudio").play()
+        return history
+    }, 200);
 }
 
 
