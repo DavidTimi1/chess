@@ -231,12 +231,34 @@ i{
     margin-bottom: 0px;
     height : 15px;
 }
+#noSabi{
+    font-size: 20px;
+    font-weight: bold;
+}
+#noSabi:hover{
+    animation : resizeGlow 100ms ease-in-out forwards;
+}
 #note{
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     height: fit-content;
     border-radius: 10px;
     margin-left: 20px;
     margin-bottom: 10px;
+}
+.rank{
+    height: 70px;
+    width : 20px;
+}
+.file{
+    height : 20px;
+    width : 70px;
+}
+.rank,
+.file{
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #573a2e;
+    color: #FFFDD0;
 }
 
 @media screen and (max-width: 800px){
