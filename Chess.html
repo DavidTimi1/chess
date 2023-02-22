@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess</title>
     <link rel="stylesheet" href="Chess.css">
-    <script src="https://kit.fontawesome.com/9564db1e37.js" crossorigin="anonymous"></script>
-<!--     <script src="9564db1e37.js"></script> -->
+    <!-- <script src="https://kit.fontawesome.com/9564db1e37.js" crossorigin="anonymous"></script> -->
+    <script src="9564db1e37.js"></script>
 </head>
 <body>
     <i class="fas fa-undo" onclick="undo()"> <br> <span id="mini">   Undo Previous Move</span></i>
@@ -40,7 +40,7 @@
             </div>
 
             <div id="noSabi" class="hide">
-                <a href="https://www.wikihow.com/Play-Chess">
+                <a href="https://www.wikihow.com/Play-Chess" target="_blank">
                     <em> Don't know how to play? </em> 
                 </a>
                 
@@ -57,7 +57,20 @@
         <audio src="letsgo.mp3" id="letsgoAudio"></audio>
 
     <table id="chessboard" class = "hide">
+        <tr class="columns">
+            <td class="file"></td>
+            <td class="file">A</td>
+            <td class="file">B</td>
+            <td class="file">C</td>
+            <td class="file">D</td>
+            <td class="file">E</td>
+            <td class="file">F</td>
+            <td class="file">G</td>
+            <td class="file">H</td>
+            <td class="file"></td>
+        </tr>
         <tr class="row8">
+            <td class="rank">8</td>
             <td class="dark-sqr columnA row8 col1" onclick="question(7,0)"></td>
             <td class="light-sqr columnB row8 col2" onclick="question(7,1)"></td>
             <td class="dark-sqr columnC row8 col3" onclick="question(7,2)"></td>
@@ -66,8 +79,10 @@
             <td class="light-sqr columnF row8 col6" onclick="question(7,5)"></td>
             <td class="dark-sqr columnG row8 col7" onclick="question(7,6)"></td>
             <td class="light-sqr columnH row8 col8" onclick="question(7,7)"></td>
+            <td class="rank">8</td>
         </tr>
         <tr class="row7">
+            <td class="rank">7</td>
             <td class="light-sqr columnA row7 col1" onclick="question(6,0)"></td>
             <td class="dark-sqr columnB row7 col2" onclick="question(6,1)"></td>
             <td class="light-sqr columnC row7 col3" onclick="question(6,2)"></td>
@@ -76,8 +91,10 @@
             <td class="dark-sqr columnF row7 col6" onclick="question(6,5)"></td>
             <td class="light-sqr columnG row7 col7" onclick="question(6,6)"></td>
             <td class="dark-sqr columnH row7 col8" onclick="question(6,7)"></td>
+            <td class="rank">7</td>
         </tr>
         <tr class="row6">
+            <td class="rank">6</td>
             <td class="dark-sqr columnA row6 col1" onclick="question(5,0)"></td>
             <td class="light-sqr columnB row6 col2" onclick="question(5,1)"></td>
             <td class="dark-sqr columnC row6 col3" onclick="question(5,2)"></td>
@@ -86,8 +103,10 @@
             <td class="light-sqr columnF row6 col6" onclick="question(5,5)"></td>
             <td class="dark-sqr columnG row6 col7" onclick="question(5,6)"></td>
             <td class="light-sqr columnH row6 col8" onclick="question(5,7)"></td>
+            <td class="rank">6</td>
         </tr>
         <tr class="row5">
+            <td class="rank">5</td>
             <td class="light-sqr columnA row5 col1" onclick="question(4,0)"></td>
             <td class="dark-sqr columnB row5 col2" onclick="question(4,1)"></td>
             <td class="light-sqr columnC row5 col3" onclick="question(4,2)"></td>
@@ -96,8 +115,10 @@
             <td class="dark-sqr columnF row5 col6" onclick="question(4,5)"></td>
             <td class="light-sqr columnG row5 col7" onclick="question(4,6)"></td>
             <td class="dark-sqr columnH row5 col8" onclick="question(4,7)"></td>
+            <td class="rank">5</td>
         </tr>
         <tr class="row4">
+            <td class="rank">4</td>
             <td class="dark-sqr columnA row4 col1" onclick="question(3,0)"></td>
             <td class="light-sqr columnB row4 col2" onclick="question(3,1)"></td>
             <td class="dark-sqr columnC row4 col3" onclick="question(3,2)"></td>
@@ -106,8 +127,10 @@
             <td class="light-sqr columnF row4 col6" onclick="question(3,5)"></td>
             <td class="dark-sqr columnG row4 col7" onclick="question(3,6)"></td>
             <td class="light-sqr columnH row4 col8" onclick="question(3,7)"></td>
+            <td class="rank">4</td>
         </tr>
         <tr class="row3">
+            <td class="rank">3</td>
             <td class="light-sqr columnA row3 col1" onclick="question(2,0)"></td>
             <td class="dark-sqr columnB row3 col2" onclick="question(2,1)"></td>
             <td class="light-sqr columnC row3 col3" onclick="question(2,2)"></td>
@@ -116,8 +139,10 @@
             <td class="dark-sqr columnF row3 col6" onclick="question(2,5)"></td>
             <td class="light-sqr columnG row3 col7" onclick="question(2,6)"></td>
             <td class="dark-sqr columnH row3 col8" onclick="question(2,7)"></td>
+            <td class="rank">3</td>
         </tr>
         <tr class="row2">
+            <td class="rank">2</td>
             <td class="dark-sqr columnA row2 col1" onclick="question(1,0)"></td>
             <td class="light-sqr columnB row2 col2" onclick="question(1,1)"></td>
             <td class="dark-sqr columnC row2 col3" onclick="question(1,2)"></td>
@@ -126,8 +151,10 @@
             <td class="light-sqr columnF row2 col6" onclick="question(1,5)"></td>
             <td class="dark-sqr columnG row2 col7" onclick="question(1,6)"></td>
             <td class="light-sqr columnH row2 col8" onclick="question(1,7)"></td>
+            <td class="rank">2</td>
         </tr>
         <tr class="row1">
+            <td class="rank">1</td>
             <td class="light-sqr columnA row1 col1" onclick="question(0,0)"></td>
             <td class="dark-sqr columnB row1 col2" onclick="question(0,1)"></td>
             <td class="light-sqr columnC row1 col3" onclick="question(0,2)"></td>
@@ -136,6 +163,19 @@
             <td class="dark-sqr columnF row1 col6" onclick="question(0,5)"></td>
             <td class="light-sqr columnG row1 col7" onclick="question(0,6)"></td>
             <td class="dark-sqr columnH row1 col8" onclick="question(0,7)"></td>
+            <td class="rank">1</td>
+        </tr>
+        <tr class="columns">
+            <td class="file"></td>
+            <td class="file">A</td>
+            <td class="file">B</td>
+            <td class="file">C</td>
+            <td class="file">D</td>
+            <td class="file">E</td>
+            <td class="file">F</td>
+            <td class="file">G</td>
+            <td class="file">H</td>
+            <td class="file"></td>
         </tr>
 
     </table>
@@ -166,13 +206,12 @@
         <div id="end" class="flex-container">
             <span id="mateImg-bag"></span>
         </div>
-        <button class = startbut onclick="playAgain()">PLAY AGAIN</button>
+        <button class = startbut id="replay">PLAY AGAIN</button>
     </div>
 
     <div id="notify">
         <div id="note-theme"></div>
             <div id="note">
-                efegtrhrthtyd
             </div>
 
     </div>
