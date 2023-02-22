@@ -3,6 +3,7 @@ document.getElementById("intro").classList.remove("hide");
 document.getElementById("noSabi").classList.remove("hide");
 document.getElementsByClassName("container")[0].style.filter = "blur(2px)";
 let nextOverlay = function(n){
+    document.getElementById("letsgoAudio").play();
     if (!document.getElementsByClassName("pregame")[n].classList.contains("hide")){
         document.getElementById("likemessage").innerText = " You have to like to play :) ";
     }
@@ -253,6 +254,7 @@ let history = [];
 
 // arranging the pieces on start of the game
 function arrangePieces(){
+    document.getElementById("arrangeAudio").play();
     // do this for all white pieces
     whitePieces.forEach((piece) => {
         // set the colour to white
@@ -964,6 +966,7 @@ function play(arr){
         if (checked && makeUp == "done"){
             if (isCheckmate(activeSide)){
                 notify (`The ${inactiveSide} King has been CheckMated`, "red");
+                document.getElementById("ggAudio").play();
                 endGame(activeSide);
             }
         }
@@ -2055,6 +2058,8 @@ let undo = function(){
         isChecked(oppSide);
 
     }
+    document.getElementById("reverseAudio").play()
+    return history
 }
 
 
