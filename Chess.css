@@ -1,0 +1,240 @@
+body{
+    background-color: grey;
+}
+.container{
+    height : 100vh;
+    width : 100%;
+    position: absolute;
+    background-image: url("chesspaper1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#preGame-overlay{
+    align-items: center;
+    text-align: center;
+    justify-items: center;
+    flex-direction: column;
+    margin-right: auto;
+    margin-left: auto;
+}
+.light-sqr{
+    background-color: #FFFDD0;
+    border: 1px solid #FFFDD0;
+}
+.dark-sqr{
+    background-color: #573a2e;
+    border : 1px solid #573a2e;
+}
+table{
+    width: 650px;
+    height: 600px;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: 0px 0px 10px 10px #130a07;
+    border-collapse: collapse;
+}
+
+td{
+    padding: 0px;
+    font-size: 35px;
+    height: 78px;
+    width: 75px;
+}
+
+#end-overlay,
+#promote-overlay{
+    
+    display : none; 
+    top : 10px;
+    width : 100%;
+    height : 650px;
+    text-align: center;
+    align-items: center;
+    margin-right : auto;
+    margin-left : auto;
+    position: absolute;
+    flex-direction: column;
+    z-index : 10;
+
+}
+.captureable{
+    background-color: red;
+}
+.promotable{
+    background-color: purple;
+}
+.playable{
+    background-color: lightblue;
+}
+.activated{
+    background-color: green;
+}
+.check{
+    background-color: yellow;
+}
+/* .threattowhite{
+    background-color: #222;
+}
+.threattoblack{
+    background-color: #888;
+} */
+span,
+h2,
+h1{
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    color: #573a2e;
+    text-shadow: 3px 3px 4px #FFFDD0;
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 40px;    
+}
+h1{
+    margin-bottom: 10px;
+}
+h2{
+    font-size: 25px;
+}
+#side,
+#winner{
+    font-size: 50px;
+    text-shadow: 5px 5px 20px #FFFDD0;
+}
+
+#promotion{
+    display : flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 300px;
+    width: 500px;
+    align-items: center;
+}
+
+button{
+    background-color: green;
+    color : white;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 0px inset transparent;
+    box-shadow: 0px 0px 0px 0px white;
+}
+button:hover {
+    animation : resize 100ms ease-in-out forwards;
+}
+@keyframes resize{
+    0% { font-size : 25px;
+        box-shadow: 0px 0px 3px 3px white;}
+    30% {box-shadow : 0px 0px 5px 5px white;}
+    60% {box-shadow : 0px 0px 7px 7px white;}
+    100% { font-size : 40px;
+        box-shadow : 0px 0px 10px 10px white;}
+}
+#effects,
+#intro-head{
+    color : white;
+    margin-bottom: 30px;
+}
+.creatorbut{
+    background-color: transparent;
+    font-size: 30px;
+    text-shadow: 0px 0px 10px white;
+}
+.creatorbut:hover{
+    animation : resizeGlow 100ms ease-in-out forwards;
+}
+@keyframes resizeGlow{
+    0% { font-size : 25px;
+        text-shadow: 0px 0px 5px white;}
+    30% {text-shadow : 0px 0px 10px white;}
+    60% {text-shadow : 0px 0px 15px white;}
+    100% { font-size : 50px;
+        text-shadow : 0px 0px 20px white;}
+}
+#intro,
+#creator,
+#startGame,
+#noSabi{
+    top: 20vh;
+    position: relative;
+    color : white;
+}
+.hide{
+    display : none;
+}
+
+#noSabi{
+    text-decoration: none;
+    margin-top: 20px;
+}
+h3{
+    font-weight: bold;
+}
+.bloody{
+    color : red;
+    text-shadow : 0px 10px 10px #AA0000;
+    margin-top: 5%;
+    margin-bottom: 10px;
+
+}
+#mateImg{
+    width: 400px; 
+    height : 300px; 
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+#winner{
+    margin-top: 20px;
+}
+/* #end-overlay{
+    background-image: url("whiteCheckmate.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    z-index : 25;
+} */
+i{
+    font-size: 20px;
+    font-weight: bold;
+    color : white;
+    position : fixed;
+    right : 50px;
+}
+#mini{
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    text-shadow: 3px 3px 4px #FFFDD0;
+    text-transform: none;
+    font-weight: normal;
+}
+#notify{
+    position : absolute;
+    bottom : 10px;
+    left: -300px;
+    width : 300px;
+    background-color: white;
+    border-radius: 10px;
+    animation-duration:  3s;
+    animation-timing-function:  ease-in-out;
+    animation-fill-mode: forwards;
+    font-size: 15px;
+}
+@keyframes slideInOut{
+    0% {left: -300px;}
+    10% {left: 0px;}
+    80% {left: 0px;}
+    100% {left: -300px;}
+}
+#note-theme{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height : 15px;
+}
+#note{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    height: fit-content;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
