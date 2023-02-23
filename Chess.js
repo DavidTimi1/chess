@@ -3,16 +3,19 @@ document.getElementById("intro").classList.remove("hide");
 document.getElementById("noSabi").classList.remove("hide");
 document.getElementsByClassName("container")[0].style.filter = "blur(2px)";
 let nextOverlay = function(n){
-    document.getElementById("letsgoAudio").play();
-    if (!document.getElementsByClassName("pregame")[n].classList.contains("hide")){
-        document.getElementById("likemessage").innerText = " You have to like to play :) ";
-    }
-    for (i = 0; i < n ; i++){
-        document.getElementsByClassName("pregame")[i].classList.add("hide");
-    }
-    document.getElementsByClassName("pregame")[n].classList.remove("hide");
-}
+    setTimeout(function() {
 
+        document.getElementById("letsgoAudio").play();
+        if (!document.getElementsByClassName("pregame")[n].classList.contains("hide")){
+            document.getElementById("likemessage").innerText = " You have to like to play :) ";
+        }
+        for (i = 0; i < n ; i++){
+            document.getElementsByClassName("pregame")[i].classList.add("hide");
+        }
+        document.getElementsByClassName("pregame")[n].classList.remove("hide");
+
+},100);
+}
 
 
 
@@ -269,8 +272,8 @@ function arrangePieces(){
         // once the pieces are set each square is now 'occupied' by a 'white piece'
         chessboard[piece.row][piece.col].classList.add("occupied");
         chessboard[piece.row][piece.col].classList.add("white");
-    })
-    chessboard[whiteKing.row][whiteKing.col].classList.add("king");
+    });
+    chessboard[whiteKing.row][whiteKing.col].classList.add("throne");
     // for all black pieces
     blackPieces.forEach((piece) => {
         // set their colour to black
@@ -285,20 +288,24 @@ function arrangePieces(){
         chessboard[piece.row][piece.col].classList.add("occupied");
         chessboard[piece.row][piece.col].classList.add("black");
     })
-    chessboard[blackKing.row][blackKing.col].classList.add("king");
+    chessboard[blackKing.row][blackKing.col].classList.add("throne");
 }
 
 startGame = function(){
     // GAME SPECIFICS
     // arrange the pieces
-    for (i = 0; i < 3 ; i++){
-        document.getElementsByClassName("pregame")[i].classList.add("hide");
-    }
-    document.getElementById("noSabi").classList.add("hide");
-    document.getElementsByClassName("container")[0].classList.add("hide");
-    document.getElementById("preGame-overlay").classList.add("hide");
+    
     arrangePieces();
-    document.getElementsByTagName("table")[0].classList.remove("hide");
+    
+    setTimeout( function (){
+        for (i = 0; i < 3 ; i++){
+            document.getElementsByClassName("pregame")[i].classList.add("hide");
+        }
+        document.getElementById("noSabi").classList.add("hide");
+        document.getElementsByClassName("container")[0].classList.add("hide");
+        document.getElementById("preGame-overlay").classList.add("hide");
+        document.getElementsByTagName("table")[0].classList.remove("hide");
+    },200)
 
 }
 
@@ -326,16 +333,35 @@ let clearMakeUp = function (){
 }
 
 let question = function(k,l){
+
+    if (turn % 2){
+        activeSide = "black";
+        inactiveSide = "white";
+    } else {
+        activeSide = "white";
+        inactiveSide = "black";
+    }
+
     if (chessboard[k][l].classList.contains("playable") 
     || chessboard[k][l].classList.contains("promotable")){
 
         play([k,l]);
 
     } else if (chessboard[k][l].classList.contains("captureable")){
+
         play([k,l]);
+
         return "captureable";
     } else if ( chessboard[k][l].classList.contains("activated") ) {
+
         console.log("It is an active cell");
+
+    } else if ( chessboard[k][l].classList.contains(inactiveSide) ) {
+
+        notify (`Invalid Selection 
+        ${activeSide.toUpperCase()} to play`, "yellow");
+        return;
+
     } else {
         notify(`Invalid Play
         The selected square is inactive`, "yellow");
@@ -416,19 +442,19 @@ showPlays = function (id){
             for ( let i = row + 1, j = column; i <= row + 2; i++){
                 if (!chessboard[i][j].classList.contains("occupied")){
                     
-            // the pawn 'CAN' move there otherwise it can't move
-                chessboard[i][j].classList.add("playable");
-                playable.push([i,j]);
-    
-                if ( i == 2 ){
-                    continue
-                } else if ( i == 7 ){
-                    chessboard[i][j].classList.add("promotable");
-                    promotable.push([i,j]);
+                // the pawn 'CAN' move there otherwise it can't move
+                    chessboard[i][j].classList.add("playable");
+                    playable.push([i,j]);
         
+                    if ( i == 2 ){
+                        continue
+                    } else if ( i == 7 ){
+                        chessboard[i][j].classList.add("promotable");
+                        promotable.push([i,j]);
+            
+                    } else {break}
                 } else {break}
-            } else {break}
-        }
+            }
             // if it can capture an opposing piece diagonal from it
             for ( i = row + 1, j = column - 1; i <= 7 && j <= 7 && j <= column + 1; j++){
                 if( j == column || j < 0 ){ 
@@ -436,7 +462,7 @@ showPlays = function (id){
                 } else if ( chessboard[i][j].classList.contains("occupied") 
                 && chessboard[i][j].classList.contains("black"))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                 
@@ -477,7 +503,7 @@ showPlays = function (id){
                 } else if ( chessboard[i][j].classList.contains("occupied") 
                 && chessboard[i][j].classList.contains("white") )
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                         if ( row == 1 ){
@@ -530,7 +556,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -548,7 +574,7 @@ showPlays = function (id){
                     } else if (chessboard[i][j].classList.contains("occupied") 
                     && !chessboard[i][j].classList.contains(id.side))
                     {
-                        if (!chessboard[i][j].classList.contains("king")){
+                        if (!chessboard[i][j].classList.contains("throne")){
                             chessboard[i][j].classList.add("captureable");
                             captureable.push([i,j]);
                         }
@@ -566,7 +592,7 @@ showPlays = function (id){
                     } else if (chessboard[i][j].classList.contains("occupied") 
                     && !chessboard[i][j].classList.contains(id.side))
                     {
-                        if (!chessboard[i][j].classList.contains("king")){
+                        if (!chessboard[i][j].classList.contains("throne")){
                             chessboard[i][j].classList.add("captureable");
                             captureable.push([i,j]);
                         }
@@ -584,7 +610,7 @@ showPlays = function (id){
                     } else if (chessboard[i][j].classList.contains("occupied") 
                     && !chessboard[i][j].classList.contains(id.side))
                     {
-                        if (!chessboard[i][j].classList.contains("king")){
+                        if (!chessboard[i][j].classList.contains("throne")){
                             chessboard[i][j].classList.add("captureable");
                             captureable.push([i,j]);
                         }
@@ -605,7 +631,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -622,7 +648,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -639,7 +665,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -656,7 +682,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -679,7 +705,7 @@ showPlays = function (id){
             } else if (chessboard[i][j].classList.contains("occupied") 
             && !chessboard[i][j].classList.contains(id.side))
             {
-                if (!chessboard[i][j].classList.contains("king")){
+                if (!chessboard[i][j].classList.contains("throne")){
                     chessboard[i][j].classList.add("captureable");
                     captureable.push([i,j]);
                 }
@@ -698,7 +724,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -716,7 +742,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -734,7 +760,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -754,7 +780,7 @@ showPlays = function (id){
             } else if (chessboard[i][j].classList.contains("occupied") 
             && !chessboard[i][j].classList.contains(id.side))
             {
-                if (!chessboard[i][j].classList.contains("king")){
+                if (!chessboard[i][j].classList.contains("throne")){
                     chessboard[i][j].classList.add("captureable");
                     captureable.push([i,j]);
                 }
@@ -771,7 +797,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -788,7 +814,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -805,7 +831,7 @@ showPlays = function (id){
                 } else if (chessboard[i][j].classList.contains("occupied") 
                 && !chessboard[i][j].classList.contains(id.side))
                 {
-                    if (!chessboard[i][j].classList.contains("king")){
+                    if (!chessboard[i][j].classList.contains("throne")){
                         chessboard[i][j].classList.add("captureable");
                         captureable.push([i,j]);
                     }
@@ -835,7 +861,7 @@ showPlays = function (id){
                     } else if (chessboard[i][j].classList.contains("occupied") 
                     && !chessboard[i][j].classList.contains(id.side))
                     {
-                        if (!chessboard[i][j].classList.contains("king") ){
+                        if (!chessboard[i][j].classList.contains("throne") ){
                             chessboard[i][j].classList.add("captureable");
                             kingPlay.push([i,j]);
                         }
@@ -935,8 +961,8 @@ function play(arr){
         let finalPos = [activePiece.row,activePiece.col];
 
         if (activePiece.piece == "king"){
-            chessboard[prevPos[0]][prevPos[1]].classList.remove("king");
-            chessboard[a][b].classList.add("king");
+            chessboard[prevPos[0]][prevPos[1]].classList.remove("throne");
+            chessboard[a][b].classList.add("throne");
 
         }
 
@@ -955,9 +981,13 @@ function play(arr){
             document.getElementById("playAudio").play();
         }
 
-
-
-        history.push( activePiece.id + " from " + prevPos +" to "+ finalPos );
+        if( chessboard[a][b].classList.contains("captureable")){
+            history.push( history.pop() + " and " + activePiece.id + " from " + prevPos +" to "+ finalPos);
+            console.log(history);
+        } else {
+            history.push( activePiece.id + " from " + prevPos +" to "+ finalPos );
+        }
+        
         if( checked ){
             document.getElementById("checkAudio").play();
         }
@@ -1819,55 +1849,56 @@ function checkScope (n,side){
 let promoteModal = document.getElementById("promote-overlay");
 let chessBg = document.getElementsByTagName("table");
 
-    let promote = function(){
-        // show promotion overlay
-        chessBg[0].style.filter = "blur(5px)";
-        document.getElementById("side").innerText = `${activeSide.toUpperCase()} PAWN`;
+let promote = function(){
+    // show promotion overlay
+    chessBg[0].style.filter = "blur(5px)";
+    document.getElementById("side").innerText = `${activeSide.toUpperCase()} PAWN`;
 
-        document.getElementById("side").style.color = activeSide;
-        document.getElementById("side").style.textShadow = `5px 5px 4px ${inactiveSide}`;
+    document.getElementById("side").style.color = activeSide;
+    document.getElementById("side").style.textShadow = `5px 5px 4px ${inactiveSide}`;
 
-        document.getElementById("toQueen").innerHTML = `<img src = "${activeSide}-pawn-queen.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Queen <span>`
-        document.getElementById("toRook").innerHTML = `<img src = "${activeSide}-pawn-rook.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Rook <span>`
-        document.getElementById("toBishop").innerHTML = `<img src = "${activeSide}-pawn-bishop.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Bishop <span>`
-        document.getElementById("toKnight").innerHTML = `<img src = "${activeSide}-pawn-knight.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Knight <span>`
+    document.getElementById("toQueen").innerHTML = `<img src = "${activeSide}-pawn-queen.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Queen <span>`
+    document.getElementById("toRook").innerHTML = `<img src = "${activeSide}-pawn-rook.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Rook <span>`
+    document.getElementById("toBishop").innerHTML = `<img src = "${activeSide}-pawn-bishop.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Bishop <span>`
+    document.getElementById("toKnight").innerHTML = `<img src = "${activeSide}-pawn-knight.png" style="width: 100px; height: 100px;" /> <br> <span style="font-size: 30px; color: ${inactiveSide}; text-shadow: 5px 5px 4px ${activeSide};"> Knight <span>`
 
-        
-        promoteModal.style.display = "flex";
+    
+    promoteModal.style.display = "flex";
 
+}
+
+
+let upgrade = function(newPiece){
+    // select new piece
+    // change the piece to new piece
+    oldPiece = activePiece.piece;
+    activePiece.piece = newPiece;
+
+    // swap the new piece for the pawn 
+    activePiece.dir = `${activeSide}-pawn-${newPiece}.png`;
+
+    // remove promotion overlay
+    promoteModal.style.display = "none"; 
+    chessBg[0].style.filter = "none";
+
+    let g = activePiece.row;
+    let h = activePiece.col
+
+    // add the promotion to history
+    history.push( history.pop() + " and " + `${activePiece.id} promoted to ${newPiece}`);
+    console.log(history);
+    chessboard[g][h].innerHTML = `<img id="${activePiece.id}" 
+    onclick="select(${activePiece.id})" 
+    src="${activePiece.dir}"/>`;
+
+    notify (`A ${activePiece.side[0].toUpperCase() + activePiece.side.slice(1)} ${oldPiece[1].toUpperCase() + oldPiece.slice(2)} has been promoted to a ${newPiece[0].toUpperCase() + newPiece.slice(1)}`, "blue");
+
+    if ( isChecked(activeSide) ){
+        checked = true;
+        let c = eval (inactiveSide + "King" );
+        document.querySelector(`.row${c.row+1} .col${c.col+1}`).classList.add("check");
     }
-
-
-    let upgrade = function(newPiece){
-        // select new piece
-        // change the piece to new piece
-        oldPiece = activePiece.piece;
-        activePiece.piece = newPiece;
-
-        // swap the new piece for the pawn 
-        activePiece.dir = `${activeSide}-pawn-${newPiece}.png`;
-
-        // remove promotion overlay
-        promoteModal.style.display = "none"; 
-        chessBg[0].style.filter = "none";
-
-        let g = activePiece.row;
-        let h = activePiece.col
-
-        // add the promotion to history
-        history.push(`${activePiece.id} promoted to ${newPiece}`);
-        chessboard[g][h].innerHTML = `<img id="${activePiece.id}" 
-        onclick="select(${activePiece.id})" 
-        src="${activePiece.dir}"/>`;
-
-        notify (`A ${oldPiece[0].toUpperCase() + oldPiece.slice(1)} has been promoted to a ${newPiece[0].toUpperCase() + newPiece.slice(1)}`, "blue");
-
-        if ( isChecked(activeSide) ){
-            checked = true;
-            let c = eval (inactiveSide + "King" );
-            document.querySelector(`.row${c.row+1} .col${c.col+1}`).classList.add("check");
-        }
-    }
+}
     let isCheckmate = function(colour ){
         // if it is white's turn
     if (colour == "black"){
@@ -1904,6 +1935,7 @@ let chessBg = document.getElementsByTagName("table");
             for( j = 0; j < 8; j++){
                 if ( chessboard[i][j].classList.contains("playable") || chessboard[i][j].classList.contains("captureable") ){
                     console.log("not");
+                    clearMakeUp();
                     return false;
                 }
             }
@@ -1962,6 +1994,7 @@ let chessBg = document.getElementsByTagName("table");
             for( j = 7; j > 0; j--){
                 if ( chessboard[i][j].classList.contains("playable") || chessboard[i][j].classList.contains("captureable") ){
                     console.log([i,j]);
+                    clearMakeUp();
                     return false;
                 }
             }
@@ -2001,18 +2034,17 @@ let undo = function(){
         side = undoPiece.side;
         let oppSide;
         side == "white" ? oppSide = "black" : oppSide = "white"
-        if (lastLog[1] == "from"){
+        if (lastLog[1] == "from" && lastLog[5] != "and"){
 
-            let newPos = [lastLog[4][0],lastLog[4][2]];
+            let newPos = [eval(lastLog[4][0]),eval(lastLog[4][2])];
             chessboard[newPos[0]][newPos[1]].classList.remove("occupied");
             chessboard[newPos[0]][newPos[1]].classList.remove(side);
             chessboard[newPos[0]][newPos[1]].innerHTML = "";
 
-            let oldPos = [lastLog[2][0],lastLog[2][2]];
-            console.log(oldPos);
-            if (chessboard[newPos[0]][newPos[1]].classList.contains("king")){
-                chessboard[newPos[0]][newPos[1]].classList.remove("king");
-                chessboard[oldPos[0]][oldPos[1]].classList.add("king");
+            let oldPos = [eval(lastLog[2][0]),eval(lastLog[2][2])];
+            if (chessboard[newPos[0]][newPos[1]].classList.contains("throne")){
+                chessboard[newPos[0]][newPos[1]].classList.remove("throne");
+                chessboard[oldPos[0]][oldPos[1]].classList.add("throne");
             }
 
             undoPiece.row = oldPos[0];
@@ -2024,43 +2056,96 @@ let undo = function(){
             onclick="select(${undoPiece.id})" 
             src="${undoPiece.dir}"/>`;
 
-            isChecked(side);
-            isChecked(oppSide);
-            turn--;
 
 
         } else if (lastLog[1] == "captured"){
-            
-            let oldPos = [lastLog[3][0], lastLog[3][2]];
-            console.log(oldPos);
+            // reverse the capturer
+            let capturer = eval(lastLog[5]);
+            // the square the capture took place
+            let capNew = [eval(lastLog[9][0]),eval(lastLog[9][2])];
+            // 
+            chessboard[capNew[0]][capNew[1]].classList.remove(capturer.side);
+
+            // the square that the piece was on before the capture
+            let capOld = [eval(lastLog[7][0]),eval(lastLog[7][2])];
+            // if it was a king drag his throne with him
+            if (chessboard[capNew[0]][capNew[1]].classList.contains("throne")){
+                chessboard[capNew[0]][capNew[1]].classList.remove("throne");
+                chessboard[capOld[0]][capOld[1]].classList.add("throne");
+            }
+
+            capturer.row = capOld[0];
+            capturer.col = capOld[1];
+
+            chessboard[capOld[0]][capOld[1]].classList.add(capturer.side);
+            chessboard[capOld[0]][capOld[1]].innerHTML = `<img id="${capturer.id}" 
+            onclick="select(${capturer.id})" 
+            src="${capturer.dir}"/>`;
+
+            // undo the capture
+
+            let oldPos = [eval(lastLog[3][0]), eval(lastLog[3][2])];
             undoPiece.row = oldPos[0];
             undoPiece.col = oldPos[1];
-            side == "white" ? capturedBlack.pop() : capturedWhite.pop();
-            console.log(capturedWhite);
-            console.log(capturedBlack);
+            side == "white" ? capturedWhite.pop() : capturedBlack.pop();
             chessboard[oldPos[0]][oldPos[1]].classList.add(side);
 
             chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
             onclick="select(${undoPiece.id})" 
             src="${undoPiece.dir}"/>`;
 
+            // undo the promotion(if any)
+            if ( lastLog[12] ){
+                let promoted = eval(lastLog[11]);
+
+                let promOld = [eval(lastLog[7][0]),eval(lastLog[7][2])];
+
+                promoted.row = promOld[0];
+                promoted.col = promOld[1];
+
+                promoted.side == "white" ? promoted.piece = "wpawn": promoted.piece = "bpawn";
+                promoted.dir = promoted.side + "-pawn" + promoted.id.slice(-2,-1) + ".png";
+
+                chessboard[promOld[0]][promOld[1]].innerHTML = `<img id="${promoted.id}" 
+                onclick="select(${promoted.id})" 
+                src="${promoted.side + "-pawn" + promoted.id.slice(-2,-1) + ".png"}"/>`;
+            
+            }
+
+
         } else {
+
+            let newPos = [eval(lastLog[4][0]),eval(lastLog[4][2])];
+            chessboard[newPos[0]][newPos[1]].classList.remove("occupied");
+            chessboard[newPos[0]][newPos[1]].classList.remove(side);
+            chessboard[newPos[0]][newPos[1]].innerHTML = "";
+
+            let oldPos = [eval(lastLog[2][0]),eval(lastLog[2][2])];
+            if (chessboard[newPos[0]][newPos[1]].classList.contains("throne")){
+                chessboard[newPos[0]][newPos[1]].classList.remove("throne");
+                chessboard[oldPos[0]][oldPos[1]].classList.add("throne");
+            }
+
+            undoPiece.row = oldPos[0];
+            undoPiece.col = oldPos[1];
+
+            chessboard[oldPos[0]][oldPos[1]].classList.add("occupied");
+            chessboard[oldPos[0]][oldPos[1]].classList.add(side);
 
             side == "white" ? undoPiece.piece = "wpawn": undoPiece.piece = "bpawn";
             undoPiece.dir = side + "-pawn" + undoPiece.id.slice(-2,-1) + ".png";
-            let g = undoPiece.row;
-            let h = undoPiece.col;
 
-            chessboard[g][h].innerHTML = `<img id="${undoPiece.id}" 
+            chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
             onclick="select(${undoPiece.id})" 
-            src="${undoPiece.dir}"/>`;
-
-            notify( "Most recent history has been removed", "brown")
-            isChecked(side);
-            isChecked(oppSide);
+            src="${side + "-pawn" + undoPiece.id.slice(-2,-1) + ".png"}"/>`;
 
         }
         document.getElementById("reverseAudio").play()
+        notify( "Most recent history has been removed", "brown");
+        isChecked(side);
+        isChecked(oppSide);
+
+        turn--;
         return history
     }, 200);
 }
@@ -2087,121 +2172,7 @@ let notify = function(phrase,colour){
     
     
 }
-let playAgain = function(){
-    clearMakeUp();
-    // WHITE PAWNS CREATION USING OBJECT CONSTRUCTOR
-whitePawn = Array(8);
-for (let i = 0; i < 8; i++){
-    // +1 because of the 0-index needed for arrays
-    whitePawn[i+1] = new WPawn(`white-pawn${i + 1}.png`);
-    whitePawn[i+1].id = `whitePawn[${i+1}]`
-    whitePawn[i+1].row = 1;
-    whitePawn[i+1].col = i;
-}
-
-// BLACK PAWNS CREATION USING OBJECT CONSTRUCTOR
-blackPawn = Array(8);
-for (let i = 0; i < 8; i++){
-    // +1 because of the 0-index needed for arrays
-    blackPawn[i+1] = new BPawn(`black-pawn${i + 1}.png`);
-    blackPawn[i+1].id = `blackPawn[${i+1}]`;
-    blackPawn[i+1].row = 6;
-    blackPawn[i+1].col = i;
-}
-
-// WHITE KNIGHTS
-whiteKnight1 = new Knight("white-knight1.png");
-whiteKnight1.id = "whiteKnight1"
-whiteKnight1.row = 0;
-whiteKnight1.col = 1;
-whiteKnight2 = new Knight("white-knight2.png");
-whiteKnight2.id = "whiteKnight2";
-whiteKnight2.row = 0;
-whiteKnight2.col = 6;
-
-// BLACK KNIGHTS
-blackKnight1 = new Knight("black-knight1.png");
-blackKnight1.id = "blackKnight1";
-blackKnight1.row = 7;
-blackKnight1.col = 6;
-blackKnight2 = new Knight("black-knight2.png");
-blackKnight2.id = "blackKnight2";
-blackKnight2.row = 7;
-blackKnight2.col = 1;
-
-// WHITE BISHOPS
-whiteBishop1 = new Bishop("white-bishop1.png");
-whiteBishop1.id = "whiteBishop1";
-whiteBishop1.row = 0;
-whiteBishop1.col = 2;
-whiteBishop2 = new Bishop("white-bishop2.png");
-whiteBishop2.id = "whiteBishop2";
-whiteBishop2.row = 0;
-whiteBishop2.col = 5;
-
-// BLACK BISHOPS
-blackBishop1 = new Bishop("black-bishop1.png");
-blackBishop1.id = "blackBishop1";
-blackBishop1.row = 7;
-blackBishop1.col = 5;
-blackBishop2 = new Bishop("black-bishop2.png");
-blackBishop2.id = "blackBishop2";
-blackBishop2.row = 7;
-blackBishop2.col = 2;
-
-// WHITE ROOKS
-whiteRook1 = new Rook("white-rook1.png");
-whiteRook1.id = "whiteRook1";
-whiteRook1.row = 0;
-whiteRook1.col = 0;
-whiteRook2 = new Rook("white-rook2.png");
-whiteRook2.id = "whiteRook2";
-whiteRook2.row = 0;
-whiteRook2.col = 7;
-
-// BLACK ROOKS
-blackRook1 = new Rook("black-rook1.png");
-blackRook1.id = "blackRook1";
-blackRook1.row = 7;
-blackRook1.col = 7;
-blackRook2 = new Rook("black-rook2.png");
-blackRook2.id = "blackRook2";
-blackRook2.row = 7;
-blackRook2.col = 0;
-
-// QUEENS
-whiteQueen = new Queen("white-queen.png");
-whiteQueen.id = "whiteQueen";
-whiteQueen.row = 0;
-whiteQueen.col = 3;
-blackQueen = new Queen("black-queen.png");
-blackQueen.id = "blackQueen";
-blackQueen.row = 7;
-blackQueen.col = 3;
-
-// KINGS
-whiteKing = new King("white-king.png");
-whiteKing.id = "whiteKing";
-whiteKing.row = 0;
-whiteKing.col = 4;
-
-blackKing = new King("black-king.png");
-blackKing.id = "blackKing";
-blackKing.row = 7;
-blackKing.col = 4;
-
-arrangePieces();
-
-capturedWhite = [];
-capturedBlack = [];
-checked = false;
-
-history = [];
-activePiece;
-turn = 0;
-activeSide= "white";
-inactiveSide = "black";
-}
+document.getElementById("replay").innerHTML = `<a href = "${document.URL}"> PLAY AGAIN </a>`;
         
         
         // add to list of promoted pawns with img id
