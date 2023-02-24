@@ -8,6 +8,7 @@ let nextOverlay = function(n){
         document.getElementById("letsgoAudio").play();
         if (!document.getElementsByClassName("pregame")[n].classList.contains("hide")){
             document.getElementById("likemessage").innerText = " You have to like to play :) ";
+            document.getElementById("errorAudio").play();
         }
         for (i = 0; i < n ; i++){
             document.getElementsByClassName("pregame")[i].classList.add("hide");
@@ -360,11 +361,13 @@ let question = function(k,l){
 
         notify (`Invalid Selection 
         ${activeSide.toUpperCase()} to play`, "yellow");
+        document.getElementById("errorAudio").play();
         return;
 
     } else {
         notify(`Invalid Play
         The selected square is inactive`, "yellow");
+        document.getElementById("errorAudio").play();
 
         // clear the remove the former selection
         clearMakeUp();
@@ -891,6 +894,7 @@ showPlays = function (id){
                 }
             }
         }
+        if ( scroll[0] ){} else {document.getElementById("errorAudio").play();}
         return scroll;
 
     }
