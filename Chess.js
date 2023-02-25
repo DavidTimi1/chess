@@ -267,7 +267,8 @@ function arrangePieces(){
         // insert the pieces in their correct positions
         chessboard[piece.row][piece.col].innerHTML = `<img id="${piece.id}" 
         onclick="select(${piece.id})" 
-        src="${piece.dir}"/>`;
+        src="${piece.dir}"
+        style="width: 90%; height: 80%;"/>`;
 
 
         // once the pieces are set each square is now 'occupied' by a 'white piece'
@@ -283,7 +284,8 @@ function arrangePieces(){
         // arrange the pieces on the other end of the board 
         chessboard[piece.row][piece.col].innerHTML = `<img id="${piece.id}" 
         onclick="select(${piece.id})" 
-        src="${piece.dir}"/>`;
+        src="${piece.dir}"
+        style="width: 90%; height: 80%;"/>`;
 
         // the respective cells are 'occupied' by 'black pieces'
         chessboard[piece.row][piece.col].classList.add("occupied");
@@ -972,7 +974,8 @@ function play(arr){
 
         chessboard[a][b].innerHTML = `<img id="${activePiece.id}" 
         onclick="select(${activePiece.id})" 
-        src="${activePiece.dir}"/>`;
+        src="${activePiece.dir}"
+        style="width: 90%; height: 80%;"/>`;
         chessboard[a][b].classList.add("occupied");
         chessboard[a][b].classList.add(activePiece.side);
 
@@ -1893,7 +1896,8 @@ let upgrade = function(newPiece){
     console.log(history);
     chessboard[g][h].innerHTML = `<img id="${activePiece.id}" 
     onclick="select(${activePiece.id})" 
-    src="${activePiece.dir}"/>`;
+    src="${activePiece.dir}"
+    style="height: 80%; width: 90%;"/>`;
 
     notify (`A ${activePiece.side[0].toUpperCase() + activePiece.side.slice(1)} ${oldPiece[1].toUpperCase() + oldPiece.slice(2)} has been promoted to a ${newPiece[0].toUpperCase() + newPiece.slice(1)}`, "blue");
 
@@ -2058,7 +2062,8 @@ let undo = function(){
             chessboard[oldPos[0]][oldPos[1]].classList.add(side);
             chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
             onclick="select(${undoPiece.id})" 
-            src="${undoPiece.dir}"/>`;
+            src="${undoPiece.dir}"
+            style="height: 80%; width: 90%;"/>`;
 
 
 
@@ -2084,7 +2089,8 @@ let undo = function(){
             chessboard[capOld[0]][capOld[1]].classList.add(capturer.side);
             chessboard[capOld[0]][capOld[1]].innerHTML = `<img id="${capturer.id}" 
             onclick="select(${capturer.id})" 
-            src="${capturer.dir}"/>`;
+            src="${capturer.dir}"
+            style="width: 90%; height: 80%;"/>`;
 
             // undo the capture
 
@@ -2096,7 +2102,8 @@ let undo = function(){
 
             chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
             onclick="select(${undoPiece.id})" 
-            src="${undoPiece.dir}"/>`;
+            src="${undoPiece.dir}"
+            style="width: 90%; height: 80%;"/>`;
 
             // undo the promotion(if any)
             if ( lastLog[12] ){
@@ -2112,7 +2119,8 @@ let undo = function(){
 
                 chessboard[promOld[0]][promOld[1]].innerHTML = `<img id="${promoted.id}" 
                 onclick="select(${promoted.id})" 
-                src="${promoted.side + "-pawn" + promoted.id.slice(-2,-1) + ".png"}"/>`;
+                src="${promoted.side + "-pawn" + promoted.id.slice(-2,-1) + ".png"}"
+                style="width: 90%; height: 80%;"/>`;
             
             }
 
@@ -2141,7 +2149,8 @@ let undo = function(){
 
             chessboard[oldPos[0]][oldPos[1]].innerHTML = `<img id="${undoPiece.id}" 
             onclick="select(${undoPiece.id})" 
-            src="${side + "-pawn" + undoPiece.id.slice(-2,-1) + ".png"}"/>`;
+            src="${side + "-pawn" + undoPiece.id.slice(-2,-1) + ".png"}"
+            style="width: 90%; height: 80%;"/>`;
 
         }
         document.getElementById("reverseAudio").play()
